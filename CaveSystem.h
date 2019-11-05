@@ -50,6 +50,10 @@ public:
     void checkCollision(Player *p);
     void render(int SCREEN_WIDTH, int SCREEN_HEIGHT, SDL_Renderer *gRenderer);
 
+    // get the abs value of the cave blocks
+    int get_CB_rel_x();
+    int get_CB_rel_y();
+
 private:
     void generateRandomCave();
 };

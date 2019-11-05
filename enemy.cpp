@@ -46,7 +46,7 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
       enemy_hitbox=enemy_sprite;
     }
 
-    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY)
+    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, cave_system)
     {
         time_since_move = SDL_GetTicks() - last_move;
 		xVelo = 0;
@@ -145,7 +145,8 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		return leastRisky;
 	}
 
-	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY) {
+	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY) 
+	{
 		for (int i = 0; i < NUM_HORIZONTAL_SQUARES; i++) {
 			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
 				riskScores[i][j] = 0;
@@ -280,11 +281,11 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 
     Bullet* Enemy::handleFiring()
     {
-		time_since_shoot = SDL_GetTicks() - last_shot;
-    		if (time_since_shoot > FIRING_FREQ) {
-    			Bullet* b = new Bullet(xPos+width+5,yPos+height/2,450);
-    			last_shot = SDL_GetTicks();
-    			return b;
-    		}
+		// time_since_shoot = SDL_GetTicks() - last_shot;
+    	// 	if (time_since_shoot > FIRING_FREQ) {
+    	// 		Bullet* b = new Bullet(xPos+width+5,yPos+height/2,450);
+    	// 		last_shot = SDL_GetTicks();
+    	// 		return b;
+    	// 	}
     		return nullptr;
     }

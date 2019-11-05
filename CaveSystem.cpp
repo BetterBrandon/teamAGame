@@ -1,5 +1,6 @@
 #include "CaveSystem.h"
 #include "time.h"
+#include "Text.h"
 
 int CaveSystem::CAVE_END_ABS_X;
 int CaveSystem::CAVE_START_ABS_X;
@@ -57,6 +58,7 @@ CaveSystem::CaveSystem(int camX, int camY, int SCREEN_WIDTH)
     generateRandomCave();
     // printMatrix(cave_system, CAVE_SYSTEM_HEIGHT, CAVE_SYSTEM_WIDTH);
 }
+
 
 void CaveSystem::generateRandomCave()
 {
@@ -233,6 +235,9 @@ void CaveSystem::checkCollision(Player *p)
             {
                 p->undoXMove();
                 p->undoYMove();
+                //  cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT)))
+            
+                printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave Block Width: %d\n Cave Block Height: %d ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
                 // If there's still a collision, it's due to the scrolling and they need to be moved left accordingly
                 if (checkCollide(p->getPosX(), p->getPosY(), p->PLAYER_WIDTH, p->PLAYER_HEIGHT, cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT))
                 {
@@ -257,6 +262,7 @@ void CaveSystem::render(int SCREEN_WIDTH, int SCREEN_HEIGHT, SDL_Renderer *gRend
                 SDL_Rect fillRect = {curr_block->CAVE_BLOCK_REL_X, curr_block->CAVE_BLOCK_REL_Y, CaveBlock::CAVE_BLOCK_WIDTH, CaveBlock::CAVE_BLOCK_HEIGHT};
                 SDL_SetRenderDrawColor(gRenderer, 0x7F, 0x33, 0x00, 0xFF);
                 SDL_RenderFillRect(gRenderer, &fillRect);
+                
             }
 
             if (curr_block->CAVE_BLOCK_REL_X < SCREEN_WIDTH + 5 && curr_block->CAVE_BLOCK_REL_X >= 0 && curr_block->CAVE_BLOCK_REL_Y < SCREEN_HEIGHT)

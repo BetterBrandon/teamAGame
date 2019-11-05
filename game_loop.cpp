@@ -118,7 +118,7 @@ void close() {
 }
 
 // Function that prepares for enemy movement. Put in a separate method to avoid cluttering the main loop
-void moveEnemy(Enemy * en, Kamikaze* kam) {
+void moveEnemy(Enemy * en, Kamikaze* kam, CaveSystem* cave) {
 	int playerX = player->getPosX() + player->PLAYER_WIDTH/2;
 	int playerY = player->getPosY() + player->PLAYER_HEIGHT/2;
 	std::vector<int> bulletX;
@@ -140,7 +140,8 @@ void moveEnemy(Enemy * en, Kamikaze* kam) {
 	// }
 	int kamiX = kam->getX();
 	int kamiY = kam->getY();
-	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY);
+	cave_system1 = cave->cave_system;
+	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cb_abs_x, cb_abs_y, cave_system );
 }
 
 int getScore(){ return (int) (camX / 100); }

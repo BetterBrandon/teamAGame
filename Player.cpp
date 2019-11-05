@@ -214,15 +214,15 @@ void Player::render(SDL_Renderer *gRenderer, int SCREEN_WIDTH, int SCREEN_HEIGHT
 // Damages the player if they've been hit
 void Player::hit(int damage) {
 	// If the player has just been hit, they should be invunerable, so don't damage them
-	if ((SDL_GetTicks() - time_hit) <= FLICKER_TIME) {
-		return;
-	}
+	// if ((SDL_GetTicks() - time_hit) <= FLICKER_TIME) {
+	// 	return;
+	// }
 	
-	time_hit = SDL_GetTicks();
-	health -= damage;
-	if (health < 0) {
-		health = 0;
-	}
+	// time_hit = SDL_GetTicks();
+	// health -= damage;
+	// if (health < 0) {
+	// 	health = 0;
+	// }
 }
 
 // Checks if the player collided with a kamikaze, returning true if so
