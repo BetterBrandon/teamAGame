@@ -23,7 +23,7 @@ class Enemy
         void renderEnemy(SDL_Renderer* gRenderer);
 
         //Moves the enemy
-        void move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, cave_system);
+        void move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y);
 
         //Position, dimensions, and velocity accessors
         int getX();
@@ -44,7 +44,7 @@ class Enemy
         SDL_Rect* getHitbox();
         Bullet* handleFiring();
 		int chooseDirection();
-		void calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY);
+		void calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y);
 
 		// Sprites for the enemy
 		SDL_Texture* sprite1;

@@ -215,6 +215,38 @@ void CaveSystem::moveCaveBlocks(int camX, int camY)
         }
 }
 
+int CaveSystem::get_CB_rel_x()
+{
+    if(this->isEnabled)
+    {
+        int i, j;
+        for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
+            for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
+            {
+                CaveBlock *curr_block = cave_system[i][j];
+                if(curr_block ->enabled)
+                    return curr_block->CAVE_BLOCK_REL_X;
+            }
+    }
+   return 0;
+}
+
+int CaveSystem::get_CB_rel_y()
+{
+    if(this->isEnabled)
+    {
+        int i, j;
+        for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
+            for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
+            {
+                CaveBlock *curr_block = cave_system[i][j];
+                if(curr_block ->enabled)
+                    return curr_block->CAVE_BLOCK_REL_Y;
+            }
+    }
+   return 0;
+}
+
 bool checkCollide(int x, int y, int pWidth, int pHeight, int xTwo, int yTwo, int pTwoWidth, int pTwoHeight)
 {
     if (x + pWidth < xTwo || x > xTwo + pTwoWidth)
@@ -237,7 +269,8 @@ void CaveSystem::checkCollision(Player *p)
                 p->undoYMove();
                 //  cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT)))
             
-                printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave Block Width: %d\n Cave Block Height: %d ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
+                // printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave Block Width: %d\n Cave Block Height: %d ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
+                 //printf("Rel X from method: %d", get_CB_rel_x());
                 // If there's still a collision, it's due to the scrolling and they need to be moved left accordingly
                 if (checkCollide(p->getPosX(), p->getPosY(), p->PLAYER_WIDTH, p->PLAYER_HEIGHT, cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT))
                 {
@@ -262,7 +295,6 @@ void CaveSystem::render(int SCREEN_WIDTH, int SCREEN_HEIGHT, SDL_Renderer *gRend
                 SDL_Rect fillRect = {curr_block->CAVE_BLOCK_REL_X, curr_block->CAVE_BLOCK_REL_Y, CaveBlock::CAVE_BLOCK_WIDTH, CaveBlock::CAVE_BLOCK_HEIGHT};
                 SDL_SetRenderDrawColor(gRenderer, 0x7F, 0x33, 0x00, 0xFF);
                 SDL_RenderFillRect(gRenderer, &fillRect);
-                
             }
 
             if (curr_block->CAVE_BLOCK_REL_X < SCREEN_WIDTH + 5 && curr_block->CAVE_BLOCK_REL_X >= 0 && curr_block->CAVE_BLOCK_REL_Y < SCREEN_HEIGHT)

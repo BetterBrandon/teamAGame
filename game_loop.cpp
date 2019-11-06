@@ -140,8 +140,10 @@ void moveEnemy(Enemy * en, Kamikaze* kam, CaveSystem* cave) {
 	// }
 	int kamiX = kam->getX();
 	int kamiY = kam->getY();
-	cave_system1 = cave->cave_system;
-	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cb_abs_x, cb_abs_y, cave_system );
+	//printf("Cave x: %d", cave->get_CB_rel_x());
+	int cave_x = cave->get_CB_rel_x();
+	int cave_y = cave->get_CB_rel_y();
+	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave_x, cave_y);
 }
 
 int getScore(){ return (int) (camX / 100); }
@@ -261,7 +263,7 @@ int main() {
 		player->move(SCREEN_WIDTH, SCREEN_HEIGHT, LEVEL_HEIGHT, camY);
 
 		//move enemy
-		moveEnemy(en, kam);
+		moveEnemy(en, kam, cave_system);
 		newBullet = en->handleFiring();
 		if (newBullet != nullptr) {
 			bullets.push_back(newBullet);

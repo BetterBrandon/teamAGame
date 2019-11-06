@@ -53,6 +53,7 @@ public:
     // get the abs value of the cave blocks
     int get_CB_rel_x();
     int get_CB_rel_y();
+    
 
 private:
     void generateRandomCave();

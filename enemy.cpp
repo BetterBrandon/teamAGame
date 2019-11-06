@@ -46,14 +46,14 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
       enemy_hitbox=enemy_sprite;
     }
 
-    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, cave_system)
+    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y)
     {
         time_since_move = SDL_GetTicks() - last_move;
 		xVelo = 0;
 		yVelo = 0;
 
         // tiltAngle = 0;
-		calculateRiskscores(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY);
+		calculateRiskscores(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave_x, cave_y);
 		int direction = chooseDirection();
 
 		// Move right if that's the optimal direction
@@ -145,7 +145,7 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		return leastRisky;
 	}
 
-	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY) 
+	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y) 
 	{
 		for (int i = 0; i < NUM_HORIZONTAL_SQUARES; i++) {
 			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
@@ -201,6 +201,19 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		if (xBlock >= 0 && xBlock < NUM_HORIZONTAL_SQUARES) {
 			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
 				riskScores[xBlock][j] += 10;
+			}
+		}
+
+		xBlock = (cave_x - MIN_X)/SQUARE_WIDTH;
+		yBlock = (cave_y - MIN_Y)/SQUARE_WIDTH;
+		if (yBlock >= 0 && yBlock < NUM_VERTICAL_SQUARES) {
+			for (int j = 0; j < NUM_HORIZONTAL_SQUARES; j++) {
+				riskScores[j][yBlock] += 50;
+			}
+		}
+		if (xBlock >= 0 && xBlock < NUM_HORIZONTAL_SQUARES) {
+			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
+				riskScores[xBlock][j] += 50;
 			}
 		}
 
