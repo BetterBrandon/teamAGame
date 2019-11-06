@@ -31,7 +31,9 @@ void GameOver::handleEvent(SDL_Event &e, Player *player, MapBlocks *map_blocks, 
         else if (y < RESTART_BUTTON_Y){ inside_button = false; }
         else if (y > RESTART_BUTTON_Y + RESTART_BUTTON_HEIGHT){ inside_button = false; }
 
-        if (inside_button && e.type == SDL_MOUSEBUTTONUP){ restart(player, map_blocks, gRenderer); }
+        if (inside_button && e.type == SDL_MOUSEBUTTONUP){ 
+            restart(player, map_blocks, gRenderer); 
+        }
     }
 }
 

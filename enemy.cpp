@@ -28,22 +28,36 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 }
 
     Enemy::Enemy(int x, int y, int w, int h, int xvel, int yvel, SDL_Renderer *gRenderer) :xPos{(double) x}, yPos{(double) y},width{w},height{h},maxXVelo{xvel},maxYVelo{yvel}{
-	  enemy_sprite = {(int) xPos, (int) yPos, width, height};
-      enemy_hitbox = enemy_sprite;
-      sprite1 = loadImage("sprites/EnemyPlane1.png", gRenderer);
-      sprite2 = loadImage("sprites/EnemyPlane3.png", gRenderer);
-      tiltAngle = 0;
-	  last_move = SDL_GetTicks();
+	  	enemy_sprite = {(int) xPos, (int) yPos, width, height};
+		enemy_hitbox = enemy_sprite;
+		sprite1 = loadImage("sprites/EnemyPlane1.png", gRenderer);
+		sprite2 = loadImage("sprites/EnemyPlane3.png", gRenderer);
+		tiltAngle = 0;
+	  	last_move = SDL_GetTicks();
+		time_hit = SDL_GetTicks() - FLICKER_TIME;
+		last_shot = SDL_GetTicks() - FIRING_FREQ;
+		is_destroyed = false;
+		health = 10;
     }
 
     void Enemy::renderEnemy(SDL_Renderer* gRenderer){
-      if ((SDL_GetTicks() / ANIMATION_FREQ) % 2 == 1) {
-      SDL_RenderCopyEx(gRenderer, sprite1, nullptr, &enemy_sprite, tiltAngle, nullptr, SDL_FLIP_NONE);
-      }
-      else {
-        SDL_RenderCopyEx(gRenderer, sprite2, nullptr, &enemy_sprite, tiltAngle, nullptr, SDL_FLIP_NONE);
-      }
-      enemy_hitbox=enemy_sprite;
+			if ((SDL_GetTicks() - time_hit) <= FLICKER_TIME && ((SDL_GetTicks() - time_hit) / FLICKER_FREQ) % 2 == 0) {
+				return;
+			}
+
+			if (!is_destroyed){
+				if ((SDL_GetTicks() / ANIMATION_FREQ) % 2 == 1) {
+      		SDL_RenderCopyEx(gRenderer, sprite1, nullptr, &enemy_sprite, tiltAngle, nullptr, SDL_FLIP_NONE);
+      	}else {
+        	SDL_RenderCopyEx(gRenderer, sprite2, nullptr, &enemy_sprite, tiltAngle, nullptr, SDL_FLIP_NONE);
+      	}
+      	enemy_hitbox=enemy_sprite;
+			}
+
+			if ((SDL_GetTicks() - time_destroyed) >= SPAWN_FREQ && is_destroyed){
+				health = 10;
+				is_destroyed = false;
+			}
     }
 
     void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y)
@@ -241,6 +255,34 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		}
 	}
 
+	bool Enemy::checkCollision(int objX, int objY, int objW, int objH) {
+		if (is_destroyed) return false;
+		return checkCollide(objX, objY, objW, objH, xPos, yPos, width, height);
+	}
+
+	bool Enemy::checkCollide(int x, int y, int pWidth, int pHeight, int xTwo, int yTwo, int pTwoWidth, int pTwoHeight)
+	{
+	    if (x + pWidth < xTwo || x > xTwo + pTwoWidth)
+	        return false;
+	    if (y + pHeight < yTwo || y > yTwo + pTwoHeight)
+	        return false;
+	    return true;
+	}
+
+	void Enemy::hit(int d){
+		// If the player has just been hit, they should be invunerable, so don't damage them
+		if ((SDL_GetTicks() - time_hit) <= FLICKER_TIME) {
+			return;
+		}
+
+		time_hit = SDL_GetTicks();
+		health -= d;
+		if (health <= 0) {
+			health = 0;
+			time_destroyed = SDL_GetTicks();
+			is_destroyed = true;
+		}
+	}
 
     int Enemy::getX(){
       return (int) xPos;
@@ -294,11 +336,17 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 
     Bullet* Enemy::handleFiring()
     {
-		// time_since_shoot = SDL_GetTicks() - last_shot;
-    	// 	if (time_since_shoot > FIRING_FREQ) {
-    	// 		Bullet* b = new Bullet(xPos+width+5,yPos+height/2,450);
-    	// 		last_shot = SDL_GetTicks();
-    	// 		return b;
-    	// 	}
-    		return nullptr;
+		if (!is_destroyed){
+			time_since_shoot = SDL_GetTicks() - last_shot;
+			if (time_since_shoot > FIRING_FREQ) {
+				Bullet* b = new Bullet(xPos+width+5,yPos+height/2,450);
+				last_shot = SDL_GetTicks();
+				return b;
+			}
+		}
+    	return nullptr;
     }
+
+		int Enemy::getHealth(){
+			return health;
+		}

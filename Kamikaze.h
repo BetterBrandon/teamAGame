@@ -22,7 +22,7 @@ class Kamikaze
     //the y axis then assults the player after a certain period
     //of time
     void move(Player* p, int SCREEN_WIDTH);
-	
+
 	bool checkCollisionBullet(int bullX, int bullY, int bullW, int bullH);
 	bool checkCollide(int x, int y, int pWidth, int pHeight, int xTwo, int yTwo, int pTwoWidth, int pTwoHeight);
 
@@ -33,10 +33,12 @@ class Kamikaze
     void setY(int y);
     int getWidth();
     int getHeight();
+    void setArrivalTime(int a);
 
     SDL_Rect* getHitbox();
     SDL_Texture* sprite1;
     SDL_Texture* sprite2;
+
 
   private:
     static const int ANIMATION_FREQ = 100;
@@ -53,14 +55,16 @@ class Kamikaze
     double tiltAngle;
 
     // Move times, used for handling framerate-independent movement
-	int time_since_move;
-	int last_move;
+	  int time_since_move;
+	  int last_move;
 
 	// Time when the kamikaze arrives on the screen
-	int arrival_time;
+	  int arrival_time;
 
     SDL_Rect kam_sprite;
     SDL_Rect kam_hitbox;
+
+
 };
 
 #endif

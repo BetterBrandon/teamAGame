@@ -15,6 +15,10 @@ public:
     static const int PLAYER_WIDTH = 125;
     static const int PLAYER_HEIGHT = 53;
 
+    //The dimensions of the player's hurtbox
+    static const int PLAYER_HURT_WIDTH = 100;
+    static const int PLAYER_HURT_HEIGHT = 28;
+
     //Maximum axis velocity, animation frequency, and shot frequency of the player
     static const int MAX_PLAYER_VEL = 300;
 	static const int SHOOT_FREQ = 300;
@@ -65,6 +69,9 @@ public:
     
 	// Damages the player when they've been hit
 	void hit(int damage);
+
+	//heals player
+	void heal(int amount);
 	
 	// Handle collisions
 	bool checkCollisionKami(int kamiX, int kamiY, int kamiW, int kamiH);
@@ -84,6 +91,8 @@ public:
     int getVelY();
     void setPosX(int x);
     void setPosY(int y);
+	int getWidth();
+	int getHeight();
 	int getHealth();
 	
 	// Methods that can be used to undo the user's moves when dealing with collisions

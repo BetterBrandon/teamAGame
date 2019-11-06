@@ -73,8 +73,6 @@ void CaveSystem::generateRandomCave()
     */
     int i, j, x1, x2, y1, y2;
 
-    srand(time(NULL));
-
     // FILL THE BOARD WITH BLOCKS
     for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
         for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
@@ -94,7 +92,7 @@ void CaveSystem::generateRandomCave()
         // It is this 2D array that is finally rendered to the screen
 
         // y_padding will increase the height of the cave
-        
+
         int i, j, cx, cy;
 
         for(i = 0; i < path->length; i++)
@@ -129,7 +127,7 @@ void CaveSystem::generateRandomCave()
     auto bresenham_line = [&](PathSequence *seq, int x1, int y1, int x2, int y2) {
         // The Bresenham line algorithm. Not symmetrical.
         // Generates a starting line from one end of the cave to other
-        
+
         int xstep, ystep, xc, yc, acc, cnt;
         cnt = 0;
 
@@ -188,6 +186,38 @@ void CaveSystem::generateRandomCave()
         seq->length = cnt;
     };
 
+    auto uti_perturb = [&](PathSequence *seq, int mindist, int maxdist, int pertamt) {
+        int i;
+        int nx, ny;
+        int lox, loy, hix, hiy;
+        int lod2, hid2;
+        int ri, rdir;
+        int mind2, maxd2;
+        int Xoff[8] = {1, 1, 0, -1, -1, -1, 0, 1};
+        int Yoff[8] = {0, 1, 1, 1, 0, -1, -1, -1};
+
+        mind2 = mindist * mindist;
+        maxd2 = maxdist * maxdist;
+        for (i = 0; i < pertamt * seq->length; i++)
+        {
+            ri = 1 + rnd_i0(seq->length - 2);
+            rdir = rnd_i0(8);
+            nx = seq->x[ri] + Xoff[rdir];
+            ny = seq->y[ri] + Yoff[rdir];
+            lox = seq->x[ri - 1];
+            loy = seq->y[ri - 1];
+            hix = seq->x[ri + 1];
+            hiy = seq->y[ri + 1];
+            lod2 = ((nx - lox) * (nx - lox)) + ((ny - loy) * (ny - loy));
+            hid2 = ((nx - hix) * (nx - hix)) + ((ny - hiy) * (ny - hiy));
+
+            if ((lod2 < mind2) || (lod2 > maxd2) || (hid2 < mind2) || (hid2 > maxd2))
+                continue;
+
+            // seq->x[ri] = nx;
+            seq->y[ri] = ny;
+        }
+    };
 
     // Start and end point
     // y values are have a 5 point padding so that it doesnt interfere with the walls
@@ -200,6 +230,7 @@ void CaveSystem::generateRandomCave()
     PathSequence path;
 
     bresenham_line(&path, x1, y1, x2, y2);
+    uti_perturb(&path, 2, 5, 40);
 
     insert_path(CaveSystem::cave_system, &path, rand() % 6 + 8);
 }
