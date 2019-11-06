@@ -256,7 +256,7 @@ int CaveSystem::get_CB_rel_x()
             {
                 CaveBlock *curr_block = cave_system[i][j];
                 if(curr_block ->enabled)
-                    return curr_block->CAVE_BLOCK_REL_X;
+                    return curr_block->CAVE_BLOCK_ABS_X;
             }
     }
    return 0;
@@ -272,7 +272,7 @@ int CaveSystem::get_CB_rel_y()
             {
                 CaveBlock *curr_block = cave_system[i][j];
                 if(curr_block ->enabled)
-                    return curr_block->CAVE_BLOCK_REL_Y;
+                    return curr_block->CAVE_BLOCK_ABS_Y;
             }
     }
    return 0;

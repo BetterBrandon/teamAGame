@@ -222,12 +222,12 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		yBlock = (cave_y - MIN_Y)/SQUARE_WIDTH;
 		if (yBlock >= 0 && yBlock < NUM_VERTICAL_SQUARES) {
 			for (int j = 0; j < NUM_HORIZONTAL_SQUARES; j++) {
-				riskScores[j][yBlock] += 50;
+				riskScores[j][yBlock] += 100;
 			}
 		}
 		if (xBlock >= 0 && xBlock < NUM_HORIZONTAL_SQUARES) {
 			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
-				riskScores[xBlock][j] += 50;
+				riskScores[xBlock][j] += 100;
 			}
 		}
 
