@@ -241,6 +241,7 @@ void CaveSystem::moveCaveBlocks(int camX, int camY)
     for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
         for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
         {
+            //rintf("Wer are in movecaveblovks\n"); so this works when we are in the cave
             CaveBlock *curr_block = cave_system[i][j];
             curr_block->CAVE_BLOCK_REL_X = curr_block->CAVE_BLOCK_ABS_X - camX;
         }
@@ -248,42 +249,68 @@ void CaveSystem::moveCaveBlocks(int camX, int camY)
 
 int CaveSystem::get_CB_rel_x()
 {
-    if(this->isEnabled)
+    int cave_x = 0;
+    if(this->isEnabled) // this works, if not here then the game doesn't load properly 
     {
         int i, j;
         for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
-            for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
+         {   
+             for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
             {
-                CaveBlock *curr_block = cave_system[i][j];
-                if(curr_block ->enabled)
-                    return curr_block->CAVE_BLOCK_ABS_X;
+            
+                if (cave_system[i][j]->enabled == 1)
+                {
+                    // p->undoXMove();
+                    // p->undoYMove();
+                    //  cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT)))
+                
+                    //printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave ABS X: %d\n Cave ABS Y: %d\n Cave Block Width: %d\n Cave Block Height: %d\n ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_ABS_X,cave_system[i][j]->CAVE_BLOCK_ABS_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
+                    return cave_system[i][j]->CAVE_BLOCK_REL_X;
+                    //printf("Rel X from method: %d", get_CB_rel_x());
+                    // If there's still a collision, it's due to the scrolling and they need to be moved left accordingly
+                    // if (checkCollide(p->getPosX(), p->getPosY(), p->PLAYER_WIDTH, p->PLAYER_HEIGHT, cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT))
+                    // {
+                    //     p->setPosX(std::max(cave_system[i][j]->CAVE_BLOCK_REL_X - p->PLAYER_WIDTH, 0));
+                    //     p->redoYMove();
+                 }   // }
+                
             }
+        }       
+      
     }
    return 0;
 }
 
 int CaveSystem::get_CB_rel_y()
 {
+    int cave_y =0;
     if(this->isEnabled)
     {
         int i, j;
         for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
             for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
             {
-                CaveBlock *curr_block = cave_system[i][j];
-                if(curr_block ->enabled)
-                    return curr_block->CAVE_BLOCK_ABS_Y;
+               if( cave_system[i][j]->enabled == 1)
+                    return cave_system[i][j]->CAVE_BLOCK_REL_Y;
+                // CaveBlock *curr_block = cave_system[i][j];
+                // if(curr_block ->enabled)
+                //     cave_y = curr_block->CAVE_BLOCK_REL_Y;
+                //     free(curr_block);
+                //     return cave_y;
             }
     }
    return 0;
 }
-
+// plaver x, player y, player width, player height, cave rel x, cave rel y, cave block width, cave block height
 bool checkCollide(int x, int y, int pWidth, int pHeight, int xTwo, int yTwo, int pTwoWidth, int pTwoHeight)
 {
     if (x + pWidth < xTwo || x > xTwo + pTwoWidth)
         return false;
     if (y + pHeight < yTwo || y > yTwo + pTwoHeight)
         return false;
+   
+   //printf("cave rel x: %d\n", xTwo);
+   // printf(" player x: %d\n player y: %d\n player width: %d\nplayer height: %d\n cave x: %d\ncave y: %d\ncave width: %d\ncave height: %d\n", x, y, pWidth, pHeight, xTwo, yTwo, pTwoWidth, pTwoHeight);
     return true;
 }
 
@@ -293,6 +320,7 @@ void CaveSystem::checkCollision(Player *p)
     for (i = 0; i < CAVE_SYSTEM_HEIGHT; i++)
         for (j = 0; j < CAVE_SYSTEM_WIDTH; j++)
         {
+        
             // If there's a collision, cancel the player's move
             if (cave_system[i][j]->enabled == 1 && (checkCollide(p->getPosX(), p->getPosY(), p->PLAYER_WIDTH, p->PLAYER_HEIGHT, cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT)))
             {
@@ -300,7 +328,7 @@ void CaveSystem::checkCollision(Player *p)
                 p->undoYMove();
                 //  cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT)))
             
-                // printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave Block Width: %d\n Cave Block Height: %d ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
+                printf(" Cave Rel X: %d\n Cave Rel Y: %d\n Cave ABS X: %d\n Cave ABS Y: %d\n Cave Block Width: %d\n Cave Block Height: %d\n ", cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_ABS_X,cave_system[i][j]->CAVE_BLOCK_ABS_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT);
                  //printf("Rel X from method: %d", get_CB_rel_x());
                 // If there's still a collision, it's due to the scrolling and they need to be moved left accordingly
                 if (checkCollide(p->getPosX(), p->getPosY(), p->PLAYER_WIDTH, p->PLAYER_HEIGHT, cave_system[i][j]->CAVE_BLOCK_REL_X, cave_system[i][j]->CAVE_BLOCK_REL_Y, cave_system[i][j]->CAVE_BLOCK_WIDTH, cave_system[i][j]->CAVE_BLOCK_HEIGHT))

@@ -141,10 +141,12 @@ void moveEnemy(Enemy * en, Kamikaze* kam, CaveSystem* cave) {
 	// }
 	int kamiX = kam->getX();
 	int kamiY = kam->getY();
+	//printf("Kam_x: %d Kam_y: %d\n", kamiX, kamiY);
 	//printf("Cave x: %d", cave->get_CB_rel_x());
-	int cave_x = cave->get_CB_rel_x();
-	int cave_y = cave->get_CB_rel_y();
-	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave_x, cave_y);
+	// int cave_x = cave->get_CB_rel_x();
+	// int cave_y = cave->get_CB_rel_y();
+	
+	en->move(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave);
 }
 
 int getScore(){ return (int) (camX / 100); }

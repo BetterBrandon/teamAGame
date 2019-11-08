@@ -60,14 +60,14 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 			}
     }
 
-    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y)
+    void Enemy::move(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, CaveSystem * cave)
     {
         time_since_move = SDL_GetTicks() - last_move;
 		xVelo = 0;
 		yVelo = 0;
 
         // tiltAngle = 0;
-		calculateRiskscores(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave_x, cave_y);
+		calculateRiskscores(playerX, playerY, bulletX, bulletY, bulletVelX, kamiX, kamiY, cave);
 		int direction = chooseDirection();
 
 		// Move right if that's the optimal direction
@@ -159,7 +159,7 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 		return leastRisky;
 	}
 
-	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, int cave_x, int cave_y) 
+	void Enemy::calculateRiskscores(int playerX, int playerY, std::vector<int> bulletX, std::vector<int> bulletY, std::vector<int> bulletVelX, int kamiX, int kamiY, CaveSystem * cave) 
 	{
 		for (int i = 0; i < NUM_HORIZONTAL_SQUARES; i++) {
 			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
@@ -217,20 +217,24 @@ SDL_Texture* Enemy::loadImage(std::string fname, SDL_Renderer *gRenderer) {
 				riskScores[xBlock][j] += 10;
 			}
 		}
+		// int cave_x = cave->get_CB_rel_x();
+		// int cave_y = cave->get_CB_rel_y();
 
-		xBlock = (cave_x - MIN_X)/SQUARE_WIDTH;
-		yBlock = (cave_y - MIN_Y)/SQUARE_WIDTH;
-		if (yBlock >= 0 && yBlock < NUM_VERTICAL_SQUARES) {
-			for (int j = 0; j < NUM_HORIZONTAL_SQUARES; j++) {
-				riskScores[j][yBlock] += 100;
-			}
-		}
-		if (xBlock >= 0 && xBlock < NUM_HORIZONTAL_SQUARES) {
-			for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
-				riskScores[xBlock][j] += 100;
-			}
-		}
 
+		// xBlock = (cave_x - MIN_X)/SQUARE_WIDTH;
+		// yBlock = (cave_y - MIN_Y)/SQUARE_WIDTH;
+		// if (yBlock >= 0 && yBlock < NUM_VERTICAL_SQUARES) {
+		// 	for (int j = 0; j < NUM_HORIZONTAL_SQUARES; j++) {
+		// 		riskScores[j][yBlock] += 150;
+		// 		//printf("This is the risk score of the yblock %d and cave_y: %d\n", riskScores[j][yBlock], cave_y);
+		// 	}
+		// }
+		// if (xBlock >= 0 && xBlock < NUM_HORIZONTAL_SQUARES) {
+		// 	for (int j = 0; j < NUM_VERTICAL_SQUARES; j++) {
+		// 		riskScores[xBlock][j] += 150;
+		// 	}
+		// }
+	
 		// Factor proximity to the edge of the screen into the risk score
 		double center = ((MAX_Y - MIN_Y) / 2.0) / SQUARE_WIDTH - 0.5;
 		// std::cout << "center:" << center << std::endl;
